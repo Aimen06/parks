@@ -153,5 +153,4 @@ class UserController extends Controller
             return back()->withErrors(['error' => 'Erreur lors de la suppression de l\'utilisateur: ' . $e->getMessage()]);
         }
     }
-    }
 }
