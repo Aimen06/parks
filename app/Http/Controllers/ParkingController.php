@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreParkingRequest;
-use App\Http\Requests\UpdateParkingRequest;
+
 use App\Models\Parking;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
+
 
 class ParkingController extends Controller
 {
@@ -55,7 +56,7 @@ class ParkingController extends Controller
 
         try {
             // Créer un nouvel utilisateur
-            $user = User::create([
+            $user = Parking::create([
                 'name' => $validatedData['name'],
                 'number' => $validatedData['number'],
                 'address' => $validatedData['address'],
@@ -70,8 +71,7 @@ class ParkingController extends Controller
                 'exterior' => $validatedData['exterior'],
                 'owner_id' => $validatedData['owner_id'],
                 'price_per_hour' => $validatedData['price_per_hour'],
-                'available' => $validatedData['available'],
-
+                'available' => $validatedData['available']
             ]);
 
             // Rediriger vers la liste des utilisateurs avec un message de succès
@@ -118,38 +118,55 @@ class ParkingController extends Controller
     {
         // Valider les données du formulaire
         $validatedData = $request->validate([
-            'firstname' => 'required|string|max:255',
-            'lastname' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-            'role_id' => 'required|integer|exists:roles,id',
-            'address' => 'nullable|string|max:255',
-            'zip' => 'nullable|string|max:10',
+            'name' => 'nullable|string|max:50',
+            'number' => 'nullable|string|max:50',
+            'address' => 'string|email|max:255',
+            'floor' => 'nullable|string|max:5',
+            'zip' => 'nullable|string|max:5',
             'city' => 'nullable|string|max:255',
-            'rgpd' => 'nullable|boolean',
+            'latitude' => 'nullable|float',
+            'longitude' => 'nullable|float',
+            'remark' => 'nullable|string|max:255',
+            'height' => 'requiered|numeric',
+            'width' => 'required|numeric',
+            'length' => 'required|numeric',
+            'charge' => 'nullable|boolean',
+            'exterior' => 'nullable|boolean',
+            'box' => 'nullable|boolean',
+            'owner_id' => 'required|integer',
+            'price_per_hour' => 'required|numeric',
+            'available' => 'nullable|boolean'
         ]);
 
         try {
             // Trouver l'utilisateur à mettre à jour
-            $user = User::findOrFail($id);
+            $parking = Parking::findOrFail($id);
 
             // Mettre à jour les informations de l'utilisateur
-            $user->update([
-                'firstname' => $validatedData['firstname'],
-                'lastname' => $validatedData['lastname'],
-                'email' => $validatedData['email'],
-                'role_id' => $validatedData['role_id'],
+            $parking->update([
+                'name' => $validatedData['name'],
+                'number' => $validatedData['number'],
                 'address' => $validatedData['address'],
                 'zip' => $validatedData['zip'],
                 'city' => $validatedData['city'],
-                'rgpd' => $validatedData['rgpd'] ?? false,
+                'latitude' => $validatedData['latitude'],
+                'longitude' => $validatedData['longitude'],
+                'remark' => $validatedData['remark'],
+                'height' => $validatedData['height'],
+                'length' => $validatedData['length'],
+                'charge' => $validatedData['charge'],
+                'exterior' => $validatedData['exterior'],
+                'owner_id' => $validatedData['owner_id'],
+                'price_per_hour' => $validatedData['price_per_hour'],
+                'available' => $validatedData['available']
             ]);
 
             // Rediriger vers la liste des utilisateurs avec un message de succès
-            return redirect()->route('users.index')->with('success', 'Utilisateur mis à jour avec succès.');
+            return redirect()->route('parkings.index')->with('success', 'Parking mis à jour avec succès.');
 
         } catch (\Exception $e) {
             // Gestion des erreurs
-            return back()->withInput()->withErrors(['error' => 'Erreur lors de la mise à jour de l\'utilisateur: ' . $e->getMessage()]);
+            return back()->withInput()->withErrors(['error' => 'Erreur lors de la mise à jour du parking: ' . $e->getMessage()]);
         }
     }
 
