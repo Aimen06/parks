@@ -11,19 +11,19 @@ class Booking extends Model
     /** @use HasFactory<\Database\Factories\BookingFactory> */
     use HasFactory, SoftDeletes;
     protected $fillable = [
-        'user_id',
+        'customer_id',
         'parking_id',
         'entry_time',
         'exit_time',
         'duration',
-        'price',
+        'cost',
     ];
 
     protected $casts = [
         'entry_time' => 'datetime',
         'exit_time' => 'datetime',
         'duration' => 'integer',
-        'price' => 'integer', // En centimes (€ x100)
+        'cost' => 'integer', // En centimes
     ];
 
     // Une réservation concerne un parking

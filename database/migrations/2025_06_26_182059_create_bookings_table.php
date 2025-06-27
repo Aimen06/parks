@@ -22,7 +22,7 @@ return new class extends Migration
             $table->timestamp('entry_time');
             $table->timestamp('exit_time');
             $table->integer('duration'); // durée en minutes
-            $table->integer('price'); // en centimes (€ x100)
+            $table->integer('cost'); // en centimes (€ x100)
 
             // Timestamps
             $table->timestamps();
