@@ -22,7 +22,8 @@ class Booking extends Model
     protected $casts = [
         'entry_time' => 'datetime',
         'exit_time' => 'datetime',
-        'duration' => 'integer'
+        'duration' => 'integer',
+        'price' => 'integer', // En centimes (€ x100)
     ];
 
     // Une réservation concerne un parking
