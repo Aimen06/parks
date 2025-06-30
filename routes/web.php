@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ParkingController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,7 @@ Route::resource('users', UserController::class);
 Route::resource('roles', RoleController::class);
 Route::resource('parkings', ParkingController::class);
 Route::resource('bookings', BookingController::class);
+Route::resource('review', ReviewController::class);
 
 
 require __DIR__.'/settings.php';
