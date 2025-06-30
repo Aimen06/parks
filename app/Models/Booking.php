@@ -13,7 +13,9 @@ class Booking extends Model
     protected $fillable = [
         'customer_id',
         'parking_id',
+        'entry_date',
         'entry_time',
+        'exit_date',
         'exit_time',
         'duration',
         'cost',
@@ -21,7 +23,9 @@ class Booking extends Model
 
     protected $casts = [
         'entry_time' => 'datetime',
+        'entry_date' => 'date',
         'exit_time' => 'datetime',
+        'exit_date' => 'date',
         'duration' => 'integer',
         'cost' => 'integer', // En centimes
     ];
