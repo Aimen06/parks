@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ParkingController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\RoleController;
@@ -24,6 +25,7 @@ Route::resource('roles', RoleController::class);
 Route::resource('parkings', ParkingController::class);
 Route::resource('bookings', BookingController::class);
 Route::resource('review', ReviewController::class);
+Route::resource('invoice', InvoiceController::class);
 
 
 require __DIR__.'/settings.php';
