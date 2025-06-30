@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('customer_id')->constrained('users')->restrictOnDelete();
             $table->foreignId('parking_id')->constrained('parkings')->restrictOnDelete();
-            $table->integer('note')->nullable();
+            $table->integer('note');
             $table->text('comment', 300)->nullable();
             $table->timestamps();
             $table->softDeletes();
