@@ -55,8 +55,8 @@ class ParkingController extends Controller
         ]);
 
         try {
-            // Créer un nouvel utilisateur
-            $user = Parking::create([
+            // Créer un nouveau parking
+            $parking = Parking::create([
                 'name' => $validatedData['name'],
                 'number' => $validatedData['number'],
                 'address' => $validatedData['address'],
@@ -161,7 +161,7 @@ class ParkingController extends Controller
                 'available' => $validatedData['available']
             ]);
 
-            // Rediriger vers la liste des utilisateurs avec un message de succès
+            // Rediriger vers la liste des parkings avec un message de succès
             return redirect()->route('parkings.index')->with('success', 'Parking mis à jour avec succès.');
 
         } catch (\Exception $e) {
