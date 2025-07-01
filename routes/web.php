@@ -3,6 +3,7 @@
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ParkingController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -24,8 +25,9 @@ Route::resource('users', UserController::class);
 Route::resource('roles', RoleController::class);
 Route::resource('parkings', ParkingController::class);
 Route::resource('bookings', BookingController::class);
-Route::resource('review', ReviewController::class);
-Route::resource('invoice', InvoiceController::class);
+Route::resource('reviews', ReviewController::class);
+Route::resource('invoices', InvoiceController::class);
+Route::resource('payments', PaymentController::class);
 
 
 require __DIR__.'/settings.php';
