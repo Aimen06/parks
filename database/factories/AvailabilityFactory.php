@@ -18,11 +18,11 @@ class AvailabilityFactory extends Factory
     public function definition(): array
     {
         return [
-            'parking_id' => Parking::inRandomOrder()->first()?->id ?? Parking::factory(),
-            'day_of_week' => $this->faker->numberBetween(1, 7), // 1 pour lundi, 7 pour dimanche
-            'start_time' => $this->faker->time('H:i', '08:00'),
-            'end_time' => $this->faker->time('H:i', '20:00'),
-            'is_available' => $this->faker->boolean(70), // 80% de chances d'être disponible
+            'parking_id' => Parking::factory(),
+            'day_of_week' => 1, // Sera écrasé par le seeder
+            'start_time' => '07:00', // Sera écrasé par le seeder
+            'end_time' => '18:00',   // Sera écrasé par le seeder
+            'is_available' => $this->faker->boolean(70),
         ];
     }
 }
