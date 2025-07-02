@@ -1,12 +1,15 @@
 <?php
 
+use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ParkingController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UnavailabilityController;
 use App\Http\Controllers\UserController;
+use App\Models\BillingMethod;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -28,6 +31,9 @@ Route::resource('bookings', BookingController::class);
 Route::resource('reviews', ReviewController::class);
 Route::resource('invoices', InvoiceController::class);
 Route::resource('payments', PaymentController::class);
+Route::resource('billing-methods', BillingMethod::class);
+Route::resource('availabilities', AvailabilityController::class);
+Route::resource('unavailabilities', UnavailabilityController::class);
 
 
 require __DIR__.'/settings.php';
