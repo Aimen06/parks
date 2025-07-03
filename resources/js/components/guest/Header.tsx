@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import logo from '../../../assets/images/logo.svg';
+import logo from '../../../assets/images/logo-parks.png';
 import burger from '../../../assets/images/burger.svg';
 import { Link } from '@inertiajs/react';
 
