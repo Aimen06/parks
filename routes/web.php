@@ -14,7 +14,11 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('welcome');
+    if (Auth::check()) {
+        return redirect('/dashboard');
+    } else {
+        return Inertia::render('guest/HomeGuest');
+    }
 })->name('home');
 
 
