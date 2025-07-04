@@ -3,7 +3,7 @@ import logo from '../../../assets/images/logo-parks.png';
 import burger from '../../../assets/images/burger.svg';
 import { Link } from '@inertiajs/react';
 
-const Header: React.FC = () => {
+const HeaderGuest: React.FC = () => {
     const [sidebarActive, setSidebarActive] = useState(false);
 
     const toggleSidebar = () => {
@@ -188,4 +188,4 @@ const Header: React.FC = () => {
     );
 };
 
-export default Header;
+export default HeaderGuest;
