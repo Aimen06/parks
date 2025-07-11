@@ -41,7 +41,7 @@ const HeaderGuest: React.FC = () => {
                         <AnimatedNavLink href="/search">
                             Recherche un parking
                         </AnimatedNavLink>
-                        <AnimatedNavLink href="/rent">
+                        <AnimatedNavLink href="/rent-park">
                             Louer son parking
                         </AnimatedNavLink>
                         <AnimatedNavLink href="/services">

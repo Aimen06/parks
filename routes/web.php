@@ -21,6 +21,9 @@ Route::get('/', function () {
     }
 })->name('home');
 
+Route::get('/rent-park', function () {
+    return Inertia::render('guest/RentPark');
+})->name('rent-park');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {

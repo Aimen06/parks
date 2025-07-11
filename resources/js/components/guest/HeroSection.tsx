@@ -32,7 +32,7 @@ const HeroSection: React.FC = () => {
 
             {/* Contenu */}
             <div className="relative z-20 flex flex-col justify-center items-center h-full text-white text-center px-4">
-                <h1 className="text-4xl md:text-6xl font-bold mb-4 font-title">Park&Chill</h1>
+                <h1 className="text-4xl md:text-6xl font-bold mb-4 font-title">Parks</h1>
                 <p className="text-lg mb-8 font-medium">Votre nouvelle manière de réserver une place de parking</p>
                 <button className="relative inline-block px-4 py-2 font-medium group cursor-pointer">
                     <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-[#E72162] group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
@@ -45,4 +45,3 @@ const HeroSection: React.FC = () => {
 };
 
 export default HeroSection;
-''
