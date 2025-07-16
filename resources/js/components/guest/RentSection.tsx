@@ -36,7 +36,7 @@ const RentSection: React.FC = () => {
                             {/* Header */}
                             <div className="space-y-4 md:space-y-6">
                                 <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 leading-tight">
-                                    <span className="text-gray-900">Gagnez des revenus quand vous n'utilisez pas votre </span>
+                                    <span className="text-gray-900">Augmentez vos revenus avec votre </span>
                                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 animate-gradient">parking</span>
                                 </h1>
 
