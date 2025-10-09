@@ -22,3 +22,7 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+.DS_Store
+.github/
+/resources/assets/videos/*.*
+/app/Policies/
