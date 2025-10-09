@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 class Parking extends Model
 {
     /** @use HasFactory<\Database\Factories\ParkingFactory> */
@@ -31,7 +30,6 @@ class Parking extends Model
         'price_per_hour',
         'available',
     ];
-
     protected $casts = [
         'charge' => 'boolean',
         'exterior' => 'boolean',
@@ -44,9 +42,6 @@ class Parking extends Model
         'length' => 'float',
     ];
 
-    /**
-     * Relations
-     */
     public function owner()
     {
         return $this->belongsTo(User::class, 'owner_id');

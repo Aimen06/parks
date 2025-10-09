@@ -4,14 +4,17 @@ import rentImage from '../../../assets/images/rent-park.png';
 
 const RentSection: React.FC = () => {
     return (
-        <section className="relative min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 overflow-hidden">
+        <section className="relative min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 overflow-hidden flex flex-col items-center justify-between py-8 lg:py-10 px-5">
             {/* Animated Background Elements */}
             <div className="absolute inset-0 opacity-20">
                 <div className="absolute top-20 left-20 w-32 h-32 md:w-64 md:h-64 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full blur-3xl animate-pulse"></div>
                 <div className="absolute bottom-20 right-20 w-40 h-40 md:w-80 md:h-80 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full blur-3xl animate-pulse delay-1000"></div>
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 md:w-96 md:h-96 bg-gradient-to-br from-indigo-400 to-cyan-400 rounded-full blur-3xl animate-pulse delay-500"></div>
             </div>
-
+            <h1 className="text-2xl lg:text-4xl font-black text-gray-900 leading-tight">
+                <span className="text-gray-900">Augmentez vos revenus avec votre </span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 animate-gradient">parking</span>
+            </h1>
             {/* Main Content */}
             <div className="relative z-10 w-full px-4 sm:px-6 lg:px-2 py-12 md:py-20">
                 <div className="flex flex-col lg:flex-row gap-8 md:gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
@@ -35,10 +38,6 @@ const RentSection: React.FC = () => {
                         <div className="space-y-6 sm:space-y-8 md:space-y-10 text-center lg:text-left">
                             {/* Header */}
                             <div className="space-y-4 md:space-y-6">
-                                <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 leading-tight">
-                                    <span className="text-gray-900">Augmentez vos revenus avec votre </span>
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 animate-gradient">parking</span>
-                                </h1>
 
                                 <div className="flex items-start space-x-4 group justify-center lg:justify-start">
                                     <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gradient-to-r from-orange-400 to-red-500 flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">

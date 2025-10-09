@@ -8,8 +8,8 @@ import { Link } from '@inertiajs/react';
 
 const Footer: React.FC = () => {
     return (
-        <footer className="flex flex-col bg-[#E72162]
-text-white p-4 font-medium">
+        <footer className="flex bg-[#E72162] justify-between items-center
+               text-white p-4 font-medium">
             <div className="mb-4 flex space-x-4">
                 <div className="h-[20px]">
                     <img className="h-full" src={ facebook } alt="Logo" />
@@ -21,7 +21,7 @@ text-white p-4 font-medium">
                     <img className="h-full" src={ instagram } alt="Logo" />
                 </div>
             </div>
-                <nav className="flex justify-between">
+                <nav className="flex justify-between gap-y-2">
                     <ul className="flex space-x-4 text-sm  flex-wrap items-center">
                         <li><Link href="/confidentiality">Confidentialité</Link></li>
                         <li><Link href="/sitemap">Plan du site</Link></li>

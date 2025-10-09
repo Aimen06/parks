@@ -26,9 +26,9 @@ const HeaderGuest: React.FC = () => {
 
     return (
         <>
-            <header className="bg-white flex justify-between items-center px-5 border-b-2 border-gray-200 md:h-[90px] h-[50px] relative font-header">
+            <header className="bg-white flex justify-between items-center px-5 border-b-2 border-gray-200 md:h-[70px] h-[50px] relative font-header">
                 {/* Logo */}
-                <div className="md:h-[90px] h-[50px] z-50">
+                <div className="md:h-[80px] h-[50px] z-50">
                     <img className="h-full" src={logo} alt="Logo" />
                 </div>
 
