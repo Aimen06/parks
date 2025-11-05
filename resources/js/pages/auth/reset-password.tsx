@@ -36,7 +36,7 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
     };
 
     return (
-        <AuthLayout title="Reset password" description="Please enter your new password below">
+        <AuthLayout title="Réinitialiser le mot de passe" description="Saisir un nouveau mot de passe pour votre compte.">
             <Head title="Reset password" />
 
             <form onSubmit={submit}>

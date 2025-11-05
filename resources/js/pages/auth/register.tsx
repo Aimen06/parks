@@ -18,7 +18,7 @@ type RegisterForm = {
     address: string;
     zipcode: string;
     city: string;
-    rgpd: boolean;
+    phone_number?: string;
 };
 
 export default function Register() {
@@ -31,7 +31,7 @@ export default function Register() {
         address: '',
         zipcode: '',
         city: '',
-        rgpd: false,
+        phone_number: '',
     });
 
     const submit: FormEventHandler = (e) => {
@@ -54,7 +54,7 @@ export default function Register() {
                             required
                             autoFocus
                             tabIndex={1}
-                            autoComplete="firstname"
+                            autoComplete="family-name"
                             value={data.firstname}
                             onChange={(e) => setData('firstname', e.target.value)}
                             disabled={processing}
@@ -63,14 +63,13 @@ export default function Register() {
                         <InputError message={errors.firstname} className="mt-2" />
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="firstname">Prénom</Label>
+                        <Label htmlFor="lastname">Prénom</Label>
                         <Input
                             id="lastname"
                             type="text"
                             required
-                            autoFocus
-                            tabIndex={1}
-                            autoComplete="lastname"
+                            tabIndex={2}
+                            autoComplete="given-name"
                             value={data.lastname}
                             onChange={(e) => setData('lastname', e.target.value)}
                             disabled={processing}
@@ -133,12 +132,12 @@ export default function Register() {
                             id="address"
                             type="text"
                             required
-                            tabIndex={4}
-                            autoComplete="address"
+                            tabIndex={3}
+                            autoComplete="street-address"
                             value={data.address}
                             onChange={(e) => setData('address', e.target.value)}
                             disabled={processing}
-                            placeholder="2 rue de la paix"
+                            placeholder="2 rue de la Paix"
                         />
                         <InputError message={errors.address} />
                     </div>
@@ -151,7 +150,7 @@ export default function Register() {
                             tabIndex={4}
                             inputMode="numeric"
                             autoComplete="postal-code"
-                            pattern="\d{5}"
+                            pattern="[0-9]{5}"         // ou "\\d{5}"
                             maxLength={5}
                             value={data.zipcode}
                             onChange={(e) => setData('zipcode', e.target.value)}
@@ -160,20 +159,42 @@ export default function Register() {
                         />
                         <InputError message={errors.zipcode} />
                     </div>
+
                     <div className="grid gap-2">
-                        <Label htmlFor="address">Ville</Label>
+                        <Label htmlFor="city">Ville</Label>
                         <Input
                             id="city"
                             type="text"
                             required
-                            tabIndex={4}
-                            autoComplete="city"
+                            tabIndex={5}
+                            autoComplete="address-level2"
                             value={data.city}
                             onChange={(e) => setData('city', e.target.value)}
                             disabled={processing}
                             placeholder="Nice"
                         />
                         <InputError message={errors.city} />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="phone_number">Numéro de téléphone</Label>
+                        <Input
+                            id="phone_number"
+                            type="text"
+                            required
+                            tabIndex={6}
+                            inputMode="numeric"
+                            autoComplete="tel"
+                            pattern="[0-9]{10}"
+                            maxLength={10}
+                            value={data.phone_number}
+                            onChange={(e) =>
+                                setData('phone_number', e.target.value.replace(/\D/g, '').slice(0, 10))
+                            }
+                            disabled={processing}
+                            placeholder="06XXXXXXXX"
+                        />
+                        <InputError message={errors.phone_number} />
                     </div>
 
                     <Button type="submit" className="mt-2 w-full" tabIndex={5} disabled={processing}>

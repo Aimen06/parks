@@ -40,6 +40,7 @@ class RegisteredUserController extends Controller
             'address' => 'required|string|max:255',
             'zipcode' => ['required', 'regex:/^(0[1-9]|[1-8][0-9]|9[0-5]|97[1-6]|98[0-9])\d{3}$/'],
             'city' => 'required|string|min:3|max:255',
+            'phone_number' => 'nullable|string|max:10',
             'role_id'   => [
                 'nullable',
                 'integer',
@@ -61,6 +62,7 @@ class RegisteredUserController extends Controller
             'address' => $request->address,
             'zipcode' => $request->zipcode,
             'city' => $request->city,
+            'phone_number' => $request->phone_number,
             'role_id' => $roleId,
         ]);
 
