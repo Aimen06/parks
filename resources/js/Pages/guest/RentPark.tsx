@@ -1,11 +1,11 @@
 import React from 'react';
-import GuestLayout from '@/layouts/guest/GuestLayout';
-import SearchSection from '@/components/guest/parking/SearchSection';
+import GuestLayout from '@/layouts/GuestLayout';
+import RentSection from '@/components/guest/RentSection';
 
 const HomeGuest: React.FC = () => {
     return (
         <GuestLayout>
-            <SearchSection />
+            <RentSection />
         </GuestLayout>
     );
 };

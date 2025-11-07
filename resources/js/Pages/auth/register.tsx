@@ -7,7 +7,7 @@ import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import AuthLayout from '@/layouts/auth-layout';
+import AuthFormLayout from '@/layouts/AuthFormLayout';
 
 type RegisterForm = {
     firstname: string;
@@ -42,7 +42,7 @@ export default function Register() {
     };
 
     return (
-        <AuthLayout title="Créer un compte" description="Saisir vos informations pour créer un compte.">
+        <AuthFormLayout title="Créer un compte" description="Saisir vos informations pour créer un compte.">
             <Head title="Register" />
             <form className="flex flex-col gap-6" onSubmit={submit}>
                 <div className="grid gap-6">
@@ -210,6 +210,6 @@ export default function Register() {
                     </TextLink>
                 </div>
             </form>
-        </AuthLayout>
+        </AuthFormLayout>
     );
 }
