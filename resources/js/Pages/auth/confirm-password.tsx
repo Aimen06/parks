@@ -7,7 +7,7 @@ import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import AuthLayout from '@/layouts/auth-layout';
+import AuthFormLayout from '@/layouts/AuthFormLayout';
 
 export default function ConfirmPassword() {
     const { data, setData, post, processing, errors, reset } = useForm<Required<{ password: string }>>({
@@ -23,16 +23,16 @@ export default function ConfirmPassword() {
     };
 
     return (
-        <AuthLayout
-            title="Confirm your password"
-            description="This is a secure area of the application. Please confirm your password before continuing."
+        <AuthFormLayout
+            title="Confirmer le mot de passe"
+            description="Saisir votre mot de passe pour confirmer votre identité."
         >
-            <Head title="Confirm password" />
+            <Head title="Confirmer votre mot de passe" />
 
             <form onSubmit={submit}>
                 <div className="space-y-6">
                     <div className="grid gap-2">
-                        <Label htmlFor="password">Password</Label>
+                        <Label htmlFor="password">Mot de passe</Label>
                         <Input
                             id="password"
                             type="password"
@@ -55,6 +55,6 @@ export default function ConfirmPassword() {
                     </div>
                 </div>
             </form>
-        </AuthLayout>
+        </AuthFormLayout>
     );
 }

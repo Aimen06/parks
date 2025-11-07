@@ -5,7 +5,7 @@ import { FormEventHandler } from 'react';
 
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
-import AuthLayout from '@/layouts/auth-layout';
+import AuthFormLayout from '@/layouts/AuthFormLayout';
 
 export default function VerifyEmail({ status }: { status?: string }) {
     const { post, processing } = useForm({});
@@ -17,7 +17,7 @@ export default function VerifyEmail({ status }: { status?: string }) {
     };
 
     return (
-        <AuthLayout title="Verify email" description="Please verify your email address by clicking on the link we just emailed to you.">
+        <AuthFormLayout title="Verify email" description="Please verify your email address by clicking on the link we just emailed to you.">
             <Head title="Email verification" />
 
             {status === 'verification-link-sent' && (
@@ -36,6 +36,6 @@ export default function VerifyEmail({ status }: { status?: string }) {
                     Log out
                 </TextLink>
             </form>
-        </AuthLayout>
+        </AuthFormLayout>
     );
 }

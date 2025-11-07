@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import AuthLayout from '@/layouts/auth-layout';
+import AuthFormLayout from '@/layouts/AuthFormLayout';
 import HeaderGuest  from '@/components/guest/Header';
 import Footer  from '@/components/guest/Footer';
 
@@ -40,7 +40,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
     return (
         <>
             <HeaderGuest />
-            <AuthLayout title="Mon espace" description="Saisir vos informations de connexion pour accéder à votre compte.">
+            <AuthFormLayout title="Mon espace" description="Saisir vos informations de connexion pour accéder à votre compte.">
                 <Head title="Connexion" />
                 <form className="flex flex-col gap-6" onSubmit={submit}>
                     <div className="grid gap-6">
@@ -108,7 +108,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                 </form>
 
                 {status && <div className="mb-4 text-center text-sm font-medium text-green-600">{status}</div>}
-            </AuthLayout>
+            </AuthFormLayout>
             <Footer />
         </>
     );

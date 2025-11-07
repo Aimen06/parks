@@ -1,5 +1,5 @@
 import React from 'react';
-import GuestLayout from '@/layouts/guest/GuestLayout';
+import GuestLayout from '@/layouts/GuestLayout';
 import AboutSection from '@/components/guest/AboutSection';
 
 const  About: React.FC = () => {
