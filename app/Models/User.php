@@ -53,4 +53,44 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get the parkings owned by the user.
+     */
+    public function parkings()
+    {
+        return $this->hasMany(Parking::class, 'owner_id');
+    }
+
+    /**
+     * Get the bookings made by the user as a customer.
+     */
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'customer_id');
+    }
+
+    /**
+     * Get the role of the user.
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * Get the favorites of the user.
+     */
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    /**
+     * Get the favorite parkings of the user.
+     */
+    public function favoriteParkings()
+    {
+        return $this->belongsToMany(Parking::class, 'favorites')->withTimestamps();
+    }
 }

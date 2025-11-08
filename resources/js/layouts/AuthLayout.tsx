@@ -53,10 +53,10 @@ export default function AuthLayout({
                 </header>
 
                 {/* Main content area - offset by sidebar width on desktop and header height */}
-                <div className="flex min-h-screen flex-col pt-[89px] md:ml-64">
+                <div className="flex min-h-screen flex-col pt-[73px] md:ml-64">
                     {/* Page content */}
                     <main className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900">
-                        <div className="p-4 md:p-6">{children}</div>
+                        <div className="p-6">{children}</div>
                     </main>
                 </div>
             </div>
