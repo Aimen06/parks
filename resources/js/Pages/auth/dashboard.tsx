@@ -2,7 +2,6 @@ import AuthLayout from '@/layouts/AuthLayout';
 import { Head } from '@inertiajs/react';
 import React, { useState } from 'react';
 import { Calendar, MapPin, TrendingUp, DollarSign, Clock, Car, Star, Percent, Heart } from 'lucide-react';
-import { Card, Badge } from 'flowbite-react';
 
 interface User {
     id: number;
@@ -87,7 +86,7 @@ const OwnerDashboard = ({ stats }: { stats: OwnerStats }) => {
         bgColor: string;
         iconColor: string;
     }) => (
-        <Card className="hover:shadow-lg transition-shadow">
+        <div className="hover:shadow-lg transition-shadow">
             <div className="flex items-start justify-between">
                 <div className="flex-1">
                     <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">{label}</p>
@@ -104,7 +103,7 @@ const OwnerDashboard = ({ stats }: { stats: OwnerStats }) => {
                     <Icon className={`w-6 h-6 ${iconColor}`} />
                 </div>
             </div>
-        </Card>
+        </div>
     );
 
     return (
@@ -148,7 +147,7 @@ const OwnerDashboard = ({ stats }: { stats: OwnerStats }) => {
             {/* Graphiques Section */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 {/* Graphique des revenus par jour */}
-                <Card>
+                <div className="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                     <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">Revenus des 7 derniers jours</h3>
                     <div className="flex items-end justify-between h-64 gap-2">
                         {stats.revenueByPeriod.map((data, idx) => {
@@ -171,10 +170,10 @@ const OwnerDashboard = ({ stats }: { stats: OwnerStats }) => {
                             );
                         })}
                     </div>
-                </Card>
+                </div>
 
                 {/* Graphique d'occupation par heure */}
-                <Card>
+                <div className="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                     <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">Taux d'occupation par tranche horaire</h3>
                     <div className="space-y-4">
                         {stats.occupationData.map((data, idx) => {
@@ -193,12 +192,12 @@ const OwnerDashboard = ({ stats }: { stats: OwnerStats }) => {
                             );
                         })}
                     </div>
-                </Card>
+                </div>
             </div>
 
             {/* Reviews Section */}
             {stats.reviews.length > 0 && (
-                <Card className="mb-8">
+                <div className="mb-8">
                     <div className="flex items-center justify-between mb-6">
                         <h3 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                             <Star className="w-6 h-6 text-yellow-400 fill-yellow-400" />
@@ -233,7 +232,7 @@ const OwnerDashboard = ({ stats }: { stats: OwnerStats }) => {
                             </div>
                         ))}
                     </div>
-                </Card>
+                </div>
             )}
         </>
     );
@@ -243,45 +242,45 @@ const ClientDashboard = ({ stats }: { stats: ClientStats }) => {
     return (
         <>
             {/* Section Stats - En Cards Flowbite */}
-            <Card className="mb-6">
+            <div className="mb-6">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Statistiques</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 border-blue-200 dark:border-blue-700">
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 border-blue-200 dark:border-blue-700">
                         <div className="flex items-center justify-between mb-3">
                             <Car className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                         </div>
                         <h3 className="text-3xl font-bold text-blue-900 dark:text-white">{stats.activeBookings}</h3>
                         <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">Réservations actives</p>
-                    </Card>
+                    </div>
 
-                    <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 border-green-200 dark:border-green-700">
+                    <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 border-green-200 dark:border-green-700">
                         <div className="flex items-center justify-between mb-3">
                             <Calendar className="w-8 h-8 text-green-600 dark:text-green-400" />
                         </div>
                         <h3 className="text-3xl font-bold text-green-900 dark:text-white">{stats.totalBookings}</h3>
                         <p className="text-sm text-green-700 dark:text-green-300 mt-1">Total ce mois-ci</p>
-                    </Card>
+                    </div>
 
-                    <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800 border-purple-200 dark:border-purple-700">
+                    <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800 border-purple-200 dark:border-purple-700">
                         <div className="flex items-center justify-between mb-3">
                             <DollarSign className="w-8 h-8 text-purple-600 dark:text-purple-400" />
                         </div>
                         <h3 className="text-3xl font-bold text-purple-900 dark:text-white">{stats.totalSpent}€</h3>
                         <p className="text-sm text-purple-700 dark:text-purple-300 mt-1">Dépenses ce mois</p>
-                    </Card>
+                    </div>
 
-                    <Card className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900 dark:to-orange-800 border-orange-200 dark:border-orange-700">
+                    <div className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900 dark:to-orange-800 border-orange-200 dark:border-orange-700">
                         <div className="flex items-center justify-between mb-3">
                             <Star className="w-8 h-8 text-orange-600 dark:text-orange-400" />
                         </div>
                         <h3 className="text-3xl font-bold text-orange-900 dark:text-white">{stats.avgRating}/5</h3>
                         <p className="text-sm text-orange-700 dark:text-orange-300 mt-1">Note moyenne donnée</p>
-                    </Card>
+                    </div>
                 </div>
-            </Card>
+            </div>
 
             {/* Réservations à venir */}
-            <Card className="mb-6">
+            <div className="mb-6">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                         <Calendar className="w-6 h-6 text-blue-600" />
@@ -330,10 +329,10 @@ const ClientDashboard = ({ stats }: { stats: ClientStats }) => {
                         <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">Vos prochaines réservations apparaîtront ici</p>
                     </div>
                 )}
-            </Card>
+            </div>
 
             {/* Mes parkings favoris */}
-            <Card className="mb-6">
+            <div className="mb-6">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                         <Heart className="w-6 h-6 text-red-500 fill-red-500" />
@@ -372,12 +371,12 @@ const ClientDashboard = ({ stats }: { stats: ClientStats }) => {
                         <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">Ajoutez vos parkings préférés pour y accéder rapidement</p>
                     </div>
                 )}
-            </Card>
+            </div>
 
             {/* Historique récent et Mes notes en grille */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                 {/* Historique récent */}
-                <Card>
+                <div className="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                             <Clock className="w-6 h-6 text-blue-600" />
@@ -417,10 +416,10 @@ const ClientDashboard = ({ stats }: { stats: ClientStats }) => {
                             <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">Votre historique apparaîtra ici</p>
                         </div>
                     )}
-                </Card>
+                </div>
 
                 {/* Mes dernières notes */}
-                <Card>
+                <div className="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                             <Star className="w-6 h-6 text-yellow-400" />
@@ -462,7 +461,7 @@ const ClientDashboard = ({ stats }: { stats: ClientStats }) => {
                             <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">Vos avis apparaîtront ici</p>
                         </div>
                     )}
-                </Card>
+                </div>
             </div>
         </>
     );
