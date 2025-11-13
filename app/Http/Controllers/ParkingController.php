@@ -16,7 +16,20 @@ class ParkingController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Parking::where('owner_id', Auth::id())
+        // === DÉBUT DES AJOUTS ===
+        $ownerId = Auth::id();
+
+        // 1. Requête de base pour les statistiques (AVANT filtres de recherche)
+        $baseQuery = Parking::where('owner_id', $ownerId);
+
+        // 2. Calculer les statistiques globales
+        $totalAvailable = (clone $baseQuery)->where('available', true)->count();
+        $totalUnavailable = (clone $baseQuery)->where('available', false)->count();
+        // === FIN DES AJOUTS ===
+
+
+        // 3. Requête principale pour la liste (celle-ci SERA filtrée)
+        $query = Parking::where('owner_id', $ownerId)
             ->with('owner');
 
         // Recherche
@@ -24,9 +37,9 @@ class ParkingController extends Controller
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('address', 'like', "%{$search}%")
-                  ->orWhere('city', 'like', "%{$search}%")
-                  ->orWhere('number', 'like', "%{$search}%");
+                    ->orWhere('address', 'like', "%{$search}%")
+                    ->orWhere('city', 'like', "%{$search}%")
+                    ->orWhere('number', 'like', "%{$search}%");
             });
         }
 
@@ -67,11 +80,18 @@ class ParkingController extends Controller
 
         $query->orderBy($sortBy, $sortDirection);
 
-        $parkings = $query->paginate(12);
+        // === MODIFICATION IMPORTANTE POUR LA PAGINATION FLOWBITE ===
+        $parkings = $query->paginate(12)->withQueryString();
 
         return Inertia::render('parkings/Index', [
             'parkings' => $parkings,
-            'filters' => $request->only(['search', 'available', 'type', 'sort_by', 'sort_direction'])
+            'filters' => $request->only(['search', 'available', 'type', 'sort_by', 'sort_direction']),
+
+            // === AJOUT DE LA NOUVELLE PROP 'stats' ===
+            'stats' => [
+                'available' => $totalAvailable,
+                'unavailable' => $totalUnavailable
+            ]
         ]);
     }
 

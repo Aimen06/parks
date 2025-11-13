@@ -29,6 +29,9 @@ class Parking extends Model
         'owner_id',
         'price_per_hour',
         'available',
+        'image_1',
+        'image_2',
+        'image_3',
     ];
     protected $casts = [
         'charge' => 'boolean',
