@@ -4,10 +4,10 @@ import RentSection from '@/components/guest/RentSection';
 
 const HomeGuest: React.FC = () => {
     return (
-        <GuestLayout>
-            <RentSection />
-        </GuestLayout>
+        <RentSection />
     );
 };
+
+HomeGuest.layout = (page: React.ReactElement) => <GuestLayout>{page}</GuestLayout>;
 
 export default HomeGuest;

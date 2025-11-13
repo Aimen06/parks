@@ -1,5 +1,8 @@
 import React from 'react';
 import { usePage, Link } from '@inertiajs/react';
+import defaultParkingImage from '../../../../assets/images/parking.png';
+
+
 
 // Type pour un parking
 interface Parking {
@@ -39,13 +42,15 @@ interface PaginatedParkings {
 }
 
 // Type pour les props de la page
-interface PageProps {
+export interface PageProps {
     parkings: PaginatedParkings;
+    searchedCity: string;
 }
 
 const ResultSearch: React.FC = () => {
-    const { parkings } = usePage<PageProps>().props;
-    const cityName = parkings && parkings.data.length > 0 ? parkings.data[0].city : 'Ville inconnue';
+    const { parkings, searchedCity } = usePage<PageProps>().props;
+    const cityName = searchedCity || (parkings && parkings.data.length > 0 ? parkings.data[0].city : 'Ville inconnue');
+
 
     // Fonction pour générer des étoiles
     const renderStars = (rating: number) => {
@@ -184,9 +189,10 @@ const ResultSearch: React.FC = () => {
             {/* Header de la section */}
             <div className="bg-white border-b border-gray-200">
                 <div className="max-w-7xl mx-auto px-4 py-8">
-                    <h1 className="text-3xl font-bold text-gray-900">
+                    <h1 className="text-3xl font-bold text-gray-900 capitalize">
                         Parkings à {cityName}
                     </h1>
+
                     {parkings && parkings.data.length > 0 && (
                         <p className="text-gray-600 mt-2">
                             {parkings.total} parking{parkings.total > 1 ? 's' : ''} trouvé{parkings.total > 1 ? 's' : ''}
@@ -198,10 +204,22 @@ const ResultSearch: React.FC = () => {
             {/* Liste des parkings */}
             <div className="max-w-7xl mx-auto px-4 py-6">
                 {!parkings || parkings.data.length === 0 ? (
-                    <div className="text-center py-12">
-                        <p className="text-gray-500 text-lg">
-                            Aucun parking trouvé dans cette ville.
+                    <div className="text-center py-16 px-4 bg-white shadow-lg rounded-2xl">
+                        <svg className="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <h3 className="mt-4 text-2xl font-semibold text-gray-900">Aucun parking trouvé</h3>
+                        <p className="mt-2 text-base text-gray-500">
+                            Nous n'avons malheureusement trouvé aucun parking disponible à <span className="font-medium text-gray-700 capitalize">{cityName}</span>.
                         </p>
+                        <div className="mt-6">
+                            <Link
+                                href={route('parking.searchPage')}
+                                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            >
+                                Modifier ma recherche
+                            </Link>
+                        </div>
                     </div>
                 ) : (
                     <>
@@ -211,14 +229,16 @@ const ResultSearch: React.FC = () => {
                                     key={parking.id}
                                     className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
                                 >
-                                    <div className="flex">
+                                    <div className="flex flex-col md:flex-row">
                                         {/* Image du parking */}
-                                        <div className="w-80 h-48 flex-shrink-0">
+                                        <div className="w-full h-48 md:w-80 md:h-auto md:flex-shrink-0">
+                                            {/* === MODIFICATION ICI === */}
                                             <img
-                                                src={parking.image || '/images/default-parking.jpg'}
-                                                alt={parking.name}
+                                                src={parking.image || defaultParkingImage} // Utilisation de l'image importée
+                                                alt={parking.name || 'Image de parking par défaut'}
                                                 className="w-full h-full object-cover"
                                             />
+                                            {/* === FIN DE LA MODIFICATION === */}
                                         </div>
 
                                         {/* Contenu de la carte */}
@@ -252,7 +272,6 @@ const ResultSearch: React.FC = () => {
                             ))}
                         </div>
 
-                        {/* Composant de pagination */}
                         <PaginationComponent />
                     </>
                 )}

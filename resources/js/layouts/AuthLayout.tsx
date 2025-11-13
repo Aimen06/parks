@@ -3,15 +3,18 @@ import { type SharedData } from '@/types';
 import { usePage } from '@inertiajs/react';
 import { type PropsWithChildren } from 'react';
 import logoParks from '../../assets/images/logo-parks.png';
+// === AJOUT DE L'IMPORT ===
+import Footer from '@/components/guest/Footer';
+// === FIN DE L'AJOUT ===
 
 interface AuthLayoutProps extends PropsWithChildren {
     title?: string;
 }
 
 export default function AuthLayout({
-    children,
-    title,
-}: AuthLayoutProps) {
+                                       children,
+                                       title,
+                                   }: AuthLayoutProps) {
     const { auth } = usePage<SharedData>().props;
 
     return (
@@ -58,8 +61,10 @@ export default function AuthLayout({
                     <main className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900">
                         <div className="p-6">{children}</div>
                     </main>
+                    <Footer />
                 </div>
             </div>
+
         </SidebarProvider>
     );
 }

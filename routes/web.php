@@ -14,6 +14,8 @@ use App\Http\Controllers\UserController;
 use App\Models\BillingMethod;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
+
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -34,10 +36,23 @@ Route::get('/about', function () {
 
 Route::get('/contact', [ContactController::class, 'create'])->name('contact.create');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+// Route publique pour AFFICHER la page de recherche
+Route::get('/search', function () {
+    return Inertia::render('guest/parkings/Search');
+})->name('parking.searchPage');
+
+// === MODIFICATION ICI ===
+// La soumission de recherche et la pagination utilisent GET
+Route::get('/parkings/search', [ParkingController::class, 'search'])->name('parking.search');
+// === FIN DE LA MODIFICATION ===
+
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
+// Ce groupe gère le CRUD pour les propriétaires connectés
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
