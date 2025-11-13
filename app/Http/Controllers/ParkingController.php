@@ -96,6 +96,61 @@ class ParkingController extends Controller
     }
 
     /**
+     * Search for public parkings based on criteria.
+     * C'est la nouvelle méthode pour la recherche publique.
+     */
+    public function search(Request $request)
+    {
+        // 1. Valider les données du formulaire de recherche
+        // === MODIFICATION ICI ===
+        $validatedData = $request->validate([
+            'city' => 'required|string|max:255',
+            'start_date' => 'nullable|date',
+            'start_time' => 'nullable',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'end_time' => 'nullable',
+            'has_box' => 'nullable|boolean', // Valide 1 ou 0
+            'is_exterior' => 'nullable|boolean', // Valide 1 ou 0
+            // 'is_large_space' => 'nullable|boolean', // Supprimé
+            'has_charging' => 'nullable|boolean', // Valide 1 ou 0
+        ]);
+        // === FIN DE LA MODIFICATION ===
+
+        // 2. Commencer la requête
+        $query = Parking::query();
+
+        // 3. Appliquer les filtres
+
+        $query->where('city', 'like', '%' . $validatedData['city'] . '%');
+        $query->where('available', true);
+
+        // $request->boolean() gère parfaitement les '1' et '0' que nous envoyons
+        if ($request->boolean('has_box')) {
+            $query->where('box', true);
+        }
+
+        if ($request->boolean('is_exterior')) {
+            $query->where('exterior', true);
+        }
+
+        if ($request->boolean('has_charging')) {
+            $query->where('charge', true);
+        }
+
+        // La logique pour 'is_large_space' est supprimée
+
+        // 4. Paginer les résultats
+        $parkings = $query->paginate(10)->withQueryString();
+
+        // 5. Renvoyer la vue des résultats de recherche
+        return Inertia::render('guest/parkings/City', [
+            'parkings' => $parkings,
+            'searchedCity' => $validatedData['city'],
+        ]);
+    }
+
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()

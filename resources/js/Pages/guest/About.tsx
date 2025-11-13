@@ -4,10 +4,10 @@ import AboutSection from '@/components/guest/AboutSection';
 
 const  About: React.FC = () => {
     return (
-        <GuestLayout>
-            <AboutSection />
-        </GuestLayout>
+        <AboutSection />
     );
 };
+
+About.layout = (page: React.ReactElement) => <GuestLayout>{page}</GuestLayout>;
 
 export default About;

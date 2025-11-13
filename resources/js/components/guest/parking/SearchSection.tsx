@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { useForm } from '@inertiajs/react';
+import React from 'react';
+import { useForm, router } from '@inertiajs/react';
+import { Datepicker } from 'flowbite-react';
 
 interface ParkingSearchData {
     city: string;
@@ -9,23 +10,24 @@ interface ParkingSearchData {
     end_time: string;
     has_box: boolean;
     is_exterior: boolean;
-    is_large_space: boolean;
     has_charging: boolean;
 }
 
-export default function SearchSection() {
-    const [startDate, setStartDate] = useState<Date | null>(null);
-    const [endDate, setEndDate] = useState<Date | null>(null);
+// Helper pour formater la date en YYYY-MM-DD
+const formatDate = (date: Date): string => date.toISOString().split('T')[0];
 
-    const { data, setData, post, processing, errors } = useForm<ParkingSearchData>({
+// Définir la date d'aujourd'hui comme valeur par défaut
+const today = new Date();
+
+export default function SearchSection() {
+    const { data, setData, get, processing, errors } = useForm<ParkingSearchData>({
         city: '',
-        start_date: '',
+        start_date: formatDate(today),
         start_time: '09:00',
-        end_date: '',
+        end_date: formatDate(today),
         end_time: '16:00',
         has_box: false,
         is_exterior: false,
-        is_large_space: false,
         has_charging: false,
     });
 
@@ -37,14 +39,26 @@ export default function SearchSection() {
             return;
         }
 
-        if (!startDate || !endDate) {
+        if (!data.start_date || !data.end_date) {
             alert('Veuillez sélectionner les dates d\'arrivée et de départ');
             return;
         }
 
-        console.log('Données de recherche:', data);
-        post(route('parking.search'), {
-            ...data,
+        console.log('Données de recherche (avant transformation):', data);
+
+        // Utiliser router.get avec les données transformées
+        router.get(route('parking.search'), {
+            city: data.city,
+            start_date: data.start_date,
+            start_time: data.start_time,
+            end_date: data.end_date,
+            end_time: data.end_time,
+            has_box: data.has_box ? 1 : 0,
+            is_exterior: data.is_exterior ? 1 : 0,
+            has_charging: data.has_charging ? 1 : 0,
+        }, {
+            preserveState: true,
+            preserveScroll: true,
             onSuccess: () => {
                 console.log('Recherche effectuée avec succès');
             },
@@ -52,24 +66,21 @@ export default function SearchSection() {
                 console.log('Erreurs de validation:', errors);
             }
         });
-
     };
 
-    const toggleOption = (field: keyof ParkingSearchData) => {
+    const toggleOption = (field: 'has_box' | 'is_exterior' | 'has_charging') => {
         setData(field, !data[field]);
     };
 
     const handleStartDateChange = (date: Date | null) => {
-        setStartDate(date);
         if (date) {
-            setData('start_date', date.toISOString().split('T')[0]);
+            setData('start_date', formatDate(date));
         }
     };
 
     const handleEndDateChange = (date: Date | null) => {
-        setEndDate(date);
         if (date) {
-            setData('end_date', date.toISOString().split('T')[0]);
+            setData('end_date', formatDate(date));
         }
     };
 
@@ -83,7 +94,6 @@ export default function SearchSection() {
 
     return (
         <section className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
-            <ThemeConfig dark={false} />
             <div className="max-w-4xl mx-auto">
                 <div className="text-center mb-8">
                     <h1 className="text-3xl lg:text-4xl font-bold text-gray-800 mb-2">
@@ -109,7 +119,6 @@ export default function SearchSection() {
                                 id="city"
                                 type="text"
                                 value={data.city}
-                            className={`bg-gray-50 border ${errors.city ? 'border-red-500' : 'border-gray-300'} text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
                                 onChange={(e) => setData('city', e.target.value)}
                                 placeholder="Cannes"
                                 className="w-full px-4 py-3 border border-gray-300 shadow-sm text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
@@ -155,7 +164,6 @@ export default function SearchSection() {
                                             type="time"
                                             id="start_time"
                                             value={data.start_time}
-                                        className={`bg-gray-50 border ${errors.start_time ? 'border-red-500' : 'border-gray-300'} text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
                                             onChange={(e) => handleStartTimeChange(e.target.value)}
                                             className="rounded-none bg-gray-50 border text-gray-900 leading-none focus:ring-teal-500 focus:border-teal-500 block flex-1 w-full text-sm border-gray-300 p-2.5"
                                             min="06:00"
@@ -185,11 +193,11 @@ export default function SearchSection() {
                                     </label>
                                     <Datepicker
                                         onChange={handleEndDateChange}
+                                        minDate={new Date(data.start_date)}
                                         weekStart={1}
                                         language="fr-FR"
                                         labelTodayButton="Aujourd'hui"
                                         labelClearButton="Annuler"
-                                        minDate={startDate || new Date()}
                                     />
                                     {errors.end_date && (
                                         <p className="text-sm text-red-600">{errors.end_date}</p>
@@ -205,7 +213,6 @@ export default function SearchSection() {
                                             type="time"
                                             id="end_time"
                                             value={data.end_time}
-                                        className={`bg-gray-50 border ${errors.end_time ? 'border-red-500' : 'border-gray-300'} text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
                                             onChange={(e) => handleEndTimeChange(e.target.value)}
                                             className="rounded-none bg-gray-50 border text-gray-900 leading-none focus:ring-teal-500 focus:border-teal-500 block flex-1 w-full text-sm border-gray-300 p-2.5"
                                             min="06:00"
@@ -262,28 +269,6 @@ export default function SearchSection() {
                                     <span
                                         className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
                                             data.is_exterior ? 'translate-x-6' : 'translate-x-1'
-                                        }`}
-                                    />
-                                </button>
-                            </div>
-
-                            <div className="flex items-center justify-between py-3 px-4 bg-gray-50 rounded-none">
-                                <div className="flex items-center space-x-3">
-                                    <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4a1 1 0 011-1h4m5 0h4a1 1 0 011 1v4m0 5v4a1 1 0 01-1 1h-4m-5 0H5a1 1 0 01-1-1v-4m2-4h8v8H6V8z" />
-                                    </svg>
-                                    <span className="text-gray-700 font-medium">Place large</span>
-                                </div>
-                                <button
-                                    type="button"
-                                    onClick={() => toggleOption('is_large_space')}
-                                    className={`inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#E72162] focus:ring-offset-2 ${
-                                        data.is_large_space ? 'bg-[#E72162]' : 'bg-gray-300'
-                                    }`}
-                                >
-                                    <span
-                                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                                            data.is_large_space ? 'translate-x-6' : 'translate-x-1'
                                         }`}
                                     />
                                 </button>

@@ -4,10 +4,12 @@ import HeroSection from '@/components/guest/HeroSection';
 
 const HomeGuest: React.FC = () => {
     return (
-        <GuestLayout>
-            <HeroSection />
-        </GuestLayout>
+        <HeroSection />
     );
 };
+
+// === AJOUTER CECI ===
+HomeGuest.layout = (page: React.ReactElement) => <GuestLayout>{page}</GuestLayout>;
+// ====================
 
 export default HomeGuest;
