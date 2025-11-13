@@ -14,8 +14,6 @@ export default function Contact() {
         message: '',
     });
 
-
-    // Validation et soumission
     const handleSubmit: FormEventHandler = (e) => {
         e.preventDefault();
 
@@ -33,7 +31,9 @@ export default function Contact() {
     };
 
     return (
-        <GuestLayout>
+        // ... (tout le JSX de votre composant reste ici)
+        // <GuestLayout> <-- CETTE BALISE EST SUPPRIMÉE
+        <>
             <Head title="Contactez-nous" />
 
             <section
@@ -228,6 +228,9 @@ export default function Contact() {
                     </div>
                 </div>
             </section>
-        </GuestLayout>
+        </>
     );
 }
+
+Contact.layout = (page: React.ReactElement) => <GuestLayout>{page}</GuestLayout>;
+

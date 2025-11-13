@@ -76,17 +76,19 @@ export function AppSidebar() {
             label: 'Dashboard',
             active: page.url === '/dashboard',
         },
+        // === MODIFICATION ICI ===
         {
-            href: '/parkings/reserve',
+            href: '/search', // Corrigé (pointe vers la page de recherche)
             icon: HiCalendar,
             label: 'Réserver un parking',
-            active: page.url.startsWith('/parkings/reserve'),
+            active: page.url.startsWith('/search'), // Corrigé
         },
+        // === FIN DE LA MODIFICATION ===
         {
             href: '/parkings',
             icon: HiOfficeBuilding,
             label: 'Gérer mes parkings',
-            active: page.url.startsWith('/parkings') && !page.url.startsWith('/parkings/reserve'),
+            active: page.url.startsWith('/parkings'), // Modifié pour être plus simple
         },
         {
             href: '/invoices',
