@@ -30,7 +30,7 @@ class UserFactory extends Factory
             'password' => Hash::make('Azerty1234'),
             'role_id' => $this->faker->numberBetween(2, 4),
             'address' => $this->faker->streetAddress,
-            'zip' => $this->faker->numerify('#####'),
+            'zipcode' => $this->faker->numerify('#####'),
             'city' => $this->faker->city,
             'rgpd' => true,
         ];

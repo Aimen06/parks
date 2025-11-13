@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useForm } from '@inertiajs/react';
-import { Datepicker, ThemeConfig } from 'flowbite-react';
 
 interface ParkingSearchData {
     city: string;
@@ -110,6 +109,7 @@ export default function SearchSection() {
                                 id="city"
                                 type="text"
                                 value={data.city}
+                            className={`bg-gray-50 border ${errors.city ? 'border-red-500' : 'border-gray-300'} text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
                                 onChange={(e) => setData('city', e.target.value)}
                                 placeholder="Cannes"
                                 className="w-full px-4 py-3 border border-gray-300 shadow-sm text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
@@ -155,6 +155,7 @@ export default function SearchSection() {
                                             type="time"
                                             id="start_time"
                                             value={data.start_time}
+                                        className={`bg-gray-50 border ${errors.start_time ? 'border-red-500' : 'border-gray-300'} text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
                                             onChange={(e) => handleStartTimeChange(e.target.value)}
                                             className="rounded-none bg-gray-50 border text-gray-900 leading-none focus:ring-teal-500 focus:border-teal-500 block flex-1 w-full text-sm border-gray-300 p-2.5"
                                             min="06:00"
@@ -204,6 +205,7 @@ export default function SearchSection() {
                                             type="time"
                                             id="end_time"
                                             value={data.end_time}
+                                        className={`bg-gray-50 border ${errors.end_time ? 'border-red-500' : 'border-gray-300'} text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
                                             onChange={(e) => handleEndTimeChange(e.target.value)}
                                             className="rounded-none bg-gray-50 border text-gray-900 leading-none focus:ring-teal-500 focus:border-teal-500 block flex-1 w-full text-sm border-gray-300 p-2.5"
                                             min="06:00"

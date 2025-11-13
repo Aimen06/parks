@@ -35,16 +35,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
-Route::resource('users', UserController::class);
-Route::resource('roles', RoleController::class);
-Route::resource('parkings', ParkingController::class);
-Route::resource('bookings', BookingController::class);
-Route::resource('reviews', ReviewController::class);
-Route::resource('invoices', InvoiceController::class);
-Route::resource('payments', PaymentController::class);
-Route::resource('billing-methods', BillingMethod::class);
-Route::resource('availabilities', AvailabilityController::class);
-Route::resource('unavailabilities', UnavailabilityController::class);
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('users', UserController::class);
+    Route::resource('roles', RoleController::class);
+    Route::resource('parkings', ParkingController::class);
+    Route::resource('bookings', BookingController::class);
+    Route::resource('reviews', ReviewController::class);
+    Route::resource('invoices', InvoiceController::class);
+    Route::resource('payments', PaymentController::class);
+    Route::resource('billing-methods', BillingMethod::class);
+    Route::resource('availabilities', AvailabilityController::class);
+    Route::resource('unavailabilities', UnavailabilityController::class);
+});
 
 
 require __DIR__.'/settings.php';

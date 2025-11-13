@@ -1,5 +1,5 @@
 import React from 'react';
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/react';
 
 interface User {
     id: number;
@@ -21,7 +21,7 @@ interface Props {
 const Index: React.FC<Props> = ({ users }) => {
     const handleDelete = (id: number) => {
         if (confirm('Voulez vous supprimer cet user ?')) {
-            Inertia.delete(`/users/${id}`);
+            router.delete(`/users/${id}`);
         }
     };
 

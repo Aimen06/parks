@@ -16,7 +16,7 @@ return new class extends Migration
 
             // Informations de base
             $table->string('name');
-            $table->integer('number')->nullable();
+            $table->string('number')->nullable();
             $table->string('address');
             $table->string('floor')->nullable();
             $table->string('zip', 5);

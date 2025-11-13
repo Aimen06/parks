@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Models\Parking;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class ParkingController extends Controller
@@ -13,10 +14,85 @@ class ParkingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $parkings = Parking::all();
-        return Inertia::render('Parkings/Index', ['parkings' => $parkings]);
+        // === DÉBUT DES AJOUTS ===
+        $ownerId = Auth::id();
+
+        // 1. Requête de base pour les statistiques (AVANT filtres de recherche)
+        $baseQuery = Parking::where('owner_id', $ownerId);
+
+        // 2. Calculer les statistiques globales
+        $totalAvailable = (clone $baseQuery)->where('available', true)->count();
+        $totalUnavailable = (clone $baseQuery)->where('available', false)->count();
+        // === FIN DES AJOUTS ===
+
+
+        // 3. Requête principale pour la liste (celle-ci SERA filtrée)
+        $query = Parking::where('owner_id', $ownerId)
+            ->with('owner');
+
+        // Recherche
+        if ($request->has('search') && $request->search) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('address', 'like', "%{$search}%")
+                    ->orWhere('city', 'like', "%{$search}%")
+                    ->orWhere('number', 'like', "%{$search}%");
+            });
+        }
+
+        // Filtrer par disponibilité
+        if ($request->has('available') && $request->available !== null) {
+            $query->where('available', $request->available);
+        }
+
+        // Filtrer par type (supporte plusieurs types séparés par des virgules)
+        if ($request->has('type') && $request->type) {
+            $types = explode(',', $request->type);
+            $query->where(function($q) use ($types) {
+                foreach ($types as $type) {
+                    switch (trim($type)) {
+                        case 'box':
+                            $q->orWhere('box', true);
+                            break;
+                        case 'exterior':
+                            $q->orWhere('exterior', true);
+                            break;
+                        case 'charge':
+                            $q->orWhere('charge', true);
+                            break;
+                    }
+                }
+            });
+        }
+
+        // Tri
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortDirection = $request->get('sort_direction', 'desc');
+
+        // Colonnes autorisées pour le tri
+        $allowedSortColumns = ['name', 'number', 'city', 'price_per_hour', 'available', 'created_at'];
+        if (!in_array($sortBy, $allowedSortColumns)) {
+            $sortBy = 'created_at';
+        }
+
+        $query->orderBy($sortBy, $sortDirection);
+
+        // === MODIFICATION IMPORTANTE POUR LA PAGINATION FLOWBITE ===
+        $parkings = $query->paginate(12)->withQueryString();
+
+        return Inertia::render('parkings/Index', [
+            'parkings' => $parkings,
+            'filters' => $request->only(['search', 'available', 'type', 'sort_by', 'sort_direction']),
+
+            // === AJOUT DE LA NOUVELLE PROP 'stats' ===
+            'stats' => [
+                'available' => $totalAvailable,
+                'unavailable' => $totalUnavailable
+            ]
+        ]);
     }
 
     /**
@@ -24,7 +100,7 @@ class ParkingController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Parkings/Create');
+        return Inertia::render('parkings/Create');
     }
 
     /**
@@ -36,45 +112,47 @@ class ParkingController extends Controller
         $validatedData = $request->validate([
             'name' => 'nullable|string|max:50',
             'number' => 'nullable|string|max:50',
-            'address' => 'string|email|max:255',
+            'address' => 'required|string|max:255',
             'floor' => 'nullable|string|max:5',
-            'zip' => 'nullable|string|max:5',
-            'city' => 'nullable|string|max:255',
-            'latitude' => 'nullable|float',
-            'longitude' => 'nullable|float',
-            'remark' => 'nullable|string|max:255',
-            'height' => 'requiered|numeric',
-            'width' => 'required|numeric',
-            'length' => 'required|numeric',
+            'zip' => 'required|string|max:5',
+            'city' => 'required|string|max:255',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
+            'remark' => 'nullable|string|max:500',
+            'height' => 'required|numeric|min:0',
+            'width' => 'required|numeric|min:0',
+            'length' => 'required|numeric|min:0',
             'charge' => 'nullable|boolean',
             'exterior' => 'nullable|boolean',
             'box' => 'nullable|boolean',
-            'owner_id' => 'required|integer',
-            'price_per_hour' => 'required|numeric',
+            'price_per_hour' => 'required|integer|min:0',
             'available' => 'nullable|boolean'
         ]);
 
         try {
             // Créer un nouveau parking
             $parking = Parking::create([
-                'name' => $validatedData['name'],
-                'number' => $validatedData['number'],
+                'name' => $validatedData['name'] ?? null,
+                'number' => $validatedData['number'] ?? null,
                 'address' => $validatedData['address'],
+                'floor' => $validatedData['floor'] ?? null,
                 'zip' => $validatedData['zip'],
                 'city' => $validatedData['city'],
-                'latitude' => $validatedData['latitude'],
-                'longitude' => $validatedData['longitude'],
-                'remark' => $validatedData['remark'],
+                'latitude' => $validatedData['latitude'] ?? null,
+                'longitude' => $validatedData['longitude'] ?? null,
+                'remark' => $validatedData['remark'] ?? null,
                 'height' => $validatedData['height'],
+                'width' => $validatedData['width'],
                 'length' => $validatedData['length'],
-                'charge' => $validatedData['charge'],
-                'exterior' => $validatedData['exterior'],
-                'owner_id' => $validatedData['owner_id'],
+                'charge' => $validatedData['charge'] ?? false,
+                'exterior' => $validatedData['exterior'] ?? false,
+                'box' => $validatedData['box'] ?? false,
+                'owner_id' => Auth::id(),
                 'price_per_hour' => $validatedData['price_per_hour'],
-                'available' => $validatedData['available']
+                'available' => $validatedData['available'] ?? true
             ]);
 
-            // Rediriger vers la liste des utilisateurs avec un message de succès
+            // Rediriger vers la liste des parkings avec un message de succès
             return redirect()->route('parkings.index')->with('success', 'Parking créé avec succès.');
 
         } catch (\Exception $e) {
@@ -88,11 +166,11 @@ class ParkingController extends Controller
      */
     public function show(string $id)
     {
-        // Récupérer l'utilisateur avec l'ID donné
+        // Récupérer le parking avec l'ID donné
         $parking = Parking::findOrFail($id);
 
         // Retourner la vue Inertia avec les données du parking
-        return Inertia::render('Parkings/Show', [
+        return Inertia::render('parkings/Show', [
             'parking' => $parking
         ]);
     }
@@ -106,7 +184,7 @@ class ParkingController extends Controller
         $parking = Parking::findOrFail($id);
 
         // Retourner la vue Inertia pour l'édition du parking
-        return Inertia::render('Parkings/Edit', [
+        return Inertia::render('parkings/Edit', [
             'parking' => $parking
         ]);
     }
@@ -120,45 +198,51 @@ class ParkingController extends Controller
         $validatedData = $request->validate([
             'name' => 'nullable|string|max:50',
             'number' => 'nullable|string|max:50',
-            'address' => 'string|email|max:255',
+            'address' => 'required|string|max:255',
             'floor' => 'nullable|string|max:5',
-            'zip' => 'nullable|string|max:5',
-            'city' => 'nullable|string|max:255',
-            'latitude' => 'nullable|float',
-            'longitude' => 'nullable|float',
-            'remark' => 'nullable|string|max:255',
-            'height' => 'requiered|numeric',
-            'width' => 'required|numeric',
-            'length' => 'required|numeric',
+            'zip' => 'required|string|max:5',
+            'city' => 'required|string|max:255',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
+            'remark' => 'nullable|string|max:500',
+            'height' => 'required|numeric|min:0',
+            'width' => 'required|numeric|min:0',
+            'length' => 'required|numeric|min:0',
             'charge' => 'nullable|boolean',
             'exterior' => 'nullable|boolean',
             'box' => 'nullable|boolean',
-            'owner_id' => 'required|integer',
-            'price_per_hour' => 'required|numeric',
+            'price_per_hour' => 'required|integer|min:0',
             'available' => 'nullable|boolean'
         ]);
 
         try {
-            // Trouver l'utilisateur à mettre à jour
+            // Trouver le parking à mettre à jour
             $parking = Parking::findOrFail($id);
 
-            // Mettre à jour les informations de l'utilisateur
+            // Vérifier que le parking appartient à l'utilisateur connecté
+            if ($parking->owner_id !== Auth::id()) {
+                return back()->withErrors(['error' => 'Vous n\'êtes pas autorisé à modifier ce parking.']);
+            }
+
+            // Mettre à jour les informations du parking
             $parking->update([
-                'name' => $validatedData['name'],
-                'number' => $validatedData['number'],
+                'name' => $validatedData['name'] ?? null,
+                'number' => $validatedData['number'] ?? null,
                 'address' => $validatedData['address'],
+                'floor' => $validatedData['floor'] ?? null,
                 'zip' => $validatedData['zip'],
                 'city' => $validatedData['city'],
-                'latitude' => $validatedData['latitude'],
-                'longitude' => $validatedData['longitude'],
-                'remark' => $validatedData['remark'],
+                'latitude' => $validatedData['latitude'] ?? null,
+                'longitude' => $validatedData['longitude'] ?? null,
+                'remark' => $validatedData['remark'] ?? null,
                 'height' => $validatedData['height'],
+                'width' => $validatedData['width'],
                 'length' => $validatedData['length'],
-                'charge' => $validatedData['charge'],
-                'exterior' => $validatedData['exterior'],
-                'owner_id' => $validatedData['owner_id'],
+                'charge' => $validatedData['charge'] ?? false,
+                'exterior' => $validatedData['exterior'] ?? false,
+                'box' => $validatedData['box'] ?? false,
                 'price_per_hour' => $validatedData['price_per_hour'],
-                'available' => $validatedData['available']
+                'available' => $validatedData['available'] ?? true
             ]);
 
             // Rediriger vers la liste des parkings avec un message de succès
@@ -176,8 +260,13 @@ class ParkingController extends Controller
     public function destroy(string $id)
     {
         try {
-
             $parking = Parking::findOrFail($id);
+
+            // Vérifier que le parking appartient à l'utilisateur connecté
+            if ($parking->owner_id !== Auth::id()) {
+                return back()->withErrors(['error' => 'Vous n\'êtes pas autorisé à supprimer ce parking.']);
+            }
+
             $parking->delete();
             return redirect()->route('parkings.index')->with('success', 'Parking supprimé avec succès.');
 
