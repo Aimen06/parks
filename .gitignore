@@ -26,14 +26,4 @@ yarn-error.log
 .github/
 /resources/assets/videos/*.*
 /app/Policies/
-
-# Claude Code files
-.claude/
-CLAUDE.md
-SIDEBAR_GUIDE.md
-*.claude.*
-
-# MCP (Model Context Protocol) servers
-.mcp.json
-mcp-*.json
-.mcp/
+composer.phar
