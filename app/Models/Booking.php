@@ -10,6 +10,7 @@ class Booking extends Model
 {
     /** @use HasFactory<\Database\Factories\BookingFactory> */
     use HasFactory, SoftDeletes;
+
     protected $fillable = [
         'customer_id',
         'parking_id',
@@ -27,22 +28,19 @@ class Booking extends Model
         'exit_time' => 'datetime',
         'exit_date' => 'date',
         'duration' => 'integer',
-        'cost' => 'integer', // En centimes
+        'cost' => 'integer',
     ];
 
-    // Une réservation concerne un parking
     public function parking()
     {
         return $this->belongsTo(Parking::class);
     }
 
-    // Une réservation peut avoir une review
     public function review()
     {
         return $this->hasOne(Review::class);
     }
 
-    // Une réservation peut être associée à un paiement
     public function payment()
     {
         return $this->hasOne(Payment::class);

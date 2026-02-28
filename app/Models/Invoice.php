@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Invoice extends Model
 {
     /** @use HasFactory<\Database\Factories\InvoiceFactory> */
-    use HasFactory, softDeletes;
+    use HasFactory, SoftDeletes;
+
     protected $fillable = [
         'booking_id',
     ];
@@ -18,12 +19,13 @@ class Invoice extends Model
         'booking_id' => 'integer',
     ];
 
-    /**
-     * Relations
-     */
     public function booking()
     {
         return $this->belongsTo(Booking::class);
     }
 
+    public function payout()
+    {
+        return $this->hasOne(Payout::class);
+    }
 }
