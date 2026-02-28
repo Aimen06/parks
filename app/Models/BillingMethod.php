@@ -12,12 +12,18 @@ class BillingMethod extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'name',
-        'default',
+        'user_id',
+        'type',
+        'value',
+        'is_default',
     ];
 
     protected $casts = [
-        'default' => 'boolean',
+        'is_default' => 'boolean',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,11 +13,6 @@ class User extends Authenticatable implements MustVerifyEmail
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'firstname',
         'lastname',
@@ -31,21 +25,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone_number',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -54,43 +38,28 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    /**
-     * Get the parkings owned by the user.
-     */
     public function parkings()
     {
         return $this->hasMany(Parking::class, 'owner_id');
     }
 
-    /**
-     * Get the bookings made by the user as a customer.
-     */
     public function bookings()
     {
         return $this->hasMany(Booking::class, 'customer_id');
     }
 
-    /**
-     * Get the role of the user.
-     */
     public function role()
     {
         return $this->belongsTo(Role::class);
     }
 
-    /**
-     * Get the favorites of the user.
-     */
-    public function favorites()
+    public function payouts()
     {
-        return $this->hasMany(Favorite::class);
+        return $this->hasMany(Payout::class);
     }
 
-    /**
-     * Get the favorite parkings of the user.
-     */
-    public function favoriteParkings()
+    public function billingMethods()
     {
-        return $this->belongsToMany(Parking::class, 'favorites')->withTimestamps();
+        return $this->hasMany(BillingMethod::class);
     }
 }

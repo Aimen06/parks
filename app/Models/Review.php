@@ -12,26 +12,32 @@ class Review extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'customer_id',
+        'user_id',
         'parking_id',
-        'note',
+        'booking_id',
+        'rating',
         'comment',
     ];
 
     protected $casts = [
-        'note' => 'integer',
+        'rating' => 'integer',
     ];
 
     /**
      * Relations
      */
-    public function customer()
+    public function user()
     {
-        return $this->belongsTo(User::class, 'customer_id');
+        return $this->belongsTo(User::class);
     }
 
     public function parking()
     {
-        return $this->belongsTo(Parking::class, 'parking_id');
+        return $this->belongsTo(Parking::class);
+    }
+
+    public function booking()
+    {
+        return $this->belongsTo(Booking::class);
     }
 }
