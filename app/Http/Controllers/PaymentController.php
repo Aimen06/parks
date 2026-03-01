@@ -33,20 +33,19 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'invoice_id' => 'required|numeric',
-            'rate' => 'required|numeric',
+        $validated = $request->validate([
+            'invoice_id'        => 'required|exists:invoices,id',
+            'billing_method_id' => 'required|exists:billing_methods,id',
+            'amount'            => 'required|numeric',
+            'reference'         => 'required|string',
         ]);
 
-        try {
-            $payment = Payment::create([
-                'invoice_id' => $validatedData['invoice_id'],
-                'rate' => $validatedData['rate'],
-            ]);
-            return redirect()->route('payments.index')->with('success', 'Payment créée avec succès.');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Erreur lors de la création du payment : ' . $e->getMessage());
-        }
+        Payment::create(array_merge($validated, [
+            'user_id' => Auth::id(),
+            'status'  => 'pending'
+        ]));
+
+        return redirect()->route('payments.index')->with('success', 'Paiement enregistré.');
     }
 
     /**
