@@ -13,10 +13,22 @@ class Invoice extends Model
 
     protected $fillable = [
         'booking_id',
+        'number',
+        'amount_ht',
+        'tax_rate',
+        'tax_amount',
+        'total_amount',
+        'status',
+        'due_date'
     ];
 
     protected $casts = [
-        'booking_id' => 'integer',
+        'booking_id'   => 'integer',
+        'amount_ht'    => 'integer',
+        'tax_rate'     => 'integer',
+        'tax_amount'   => 'integer',
+        'total_amount' => 'double',
+        'due_date'     => 'datetime',
     ];
 
     public function booking()

@@ -15,15 +15,16 @@ return new class extends Migration
             $table->id();
             $table->foreignId('invoice_id')->constrained();
             $table->foreignId('user_id')->constrained();
-            $table->enum('payout_method', ['bank_transfer', 'paypal']);
-            $table->string('reference',50);
+            $table->enum('payout_method', ['bank_transfer', 'paypal', 'stripe']);
+            $table->string('reference', 50);
             $table->integer('amount');
             $table->integer('commission_rate');
             $table->integer('net_amount');
-            $table->enum('status', ['pending', 'confirmed', 'cancelled', 'completed']);
+            $table->enum('status', ['pending', 'processing', 'confirmed', 'cancelled', 'completed', 'failed'])->default('pending');
             $table->dateTime('scheduled_at');
-            $table->dateTime('processed_at');
-            $table->string('failure_reason',255);
+            $table->dateTime('processed_at')->nullable();
+            $table->string('failure_reason', 255)->nullable();
+            $table->softDeletes(); // Pour le SoftDelete que vous avez demandé
             $table->timestamps();
         });
     }

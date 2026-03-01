@@ -12,24 +12,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. D'abord les Rôles (car les Utilisateurs en dépendent)
-        $this->call(RoleSeeder::class);
-
-        // 2. Ensuite les Utilisateurs
-        $this->call(UserSeeder::class);
-
-        // 3. Ensuite les Parkings (car d'autres tables en dépendent)
-        $this->call(ParkingSeeder::class);
-
-        // 4. Tout le reste
         $this->call([
-            AvailabilitySeeder::class,
-            UnavailabilitySeeder::class,
+            RoleSeeder::class,
+            UserSeeder::class,
+            ParkingSeeder::class,
             BookingSeeder::class,
             ReviewSeeder::class,
             InvoiceSeeder::class,
             PaymentSeeder::class,
             BillingMethodSeeder::class,
+            PayoutSeeder::class
         ]);
     }
 }

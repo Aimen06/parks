@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Booking;
 use App\Models\Parking;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -18,12 +19,11 @@ class ReviewFactory extends Factory
      */
     public function definition(): array
     {
-        $parkingId = Parking::inRandomOrder()->first()->id ?? Parking::factory();
-        $customerId = User::inRandomOrder()->first()->id ?? User::factory();
         return [
-            'customer_id' => $customerId,
-            'parking_id' => $parkingId,
-            'note' => $this->faker->numberBetween(1, 5),
+            'user_id' => User::inRandomOrder()->first()?->id ?? User::factory(),
+            'parking_id' => Parking::inRandomOrder()->first()?->id ?? Parking::factory(),
+            'booking_id' => Booking::inRandomOrder()->first()?->id ?? Booking::factory(),
+            'rating' => $this->faker->numberBetween(1, 5),
             'comment' => $this->faker->text(300),
         ];
     }

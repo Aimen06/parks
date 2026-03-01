@@ -8,28 +8,30 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Booking extends Model
 {
-    /** @use HasFactory<\Database\Factories\BookingFactory> */
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'customer_id',
+        'user_id',
         'parking_id',
-        'entry_date',
-        'entry_time',
-        'exit_date',
-        'exit_time',
+        'start_date',
+        'end_date',
         'duration',
-        'cost',
+        'total_price',
+        'status',
+        'cancellation_reason',
     ];
 
     protected $casts = [
-        'entry_time' => 'datetime',
-        'entry_date' => 'date',
-        'exit_time' => 'datetime',
-        'exit_date' => 'date',
-        'duration' => 'integer',
-        'cost' => 'integer',
+        'start_date' => 'datetime', // Type dateTime
+        'end_date'   => 'datetime', // Type dateTime
+        'duration'   => 'integer',
+        'total_price' => 'integer',
     ];
+
+    public function user() // Relation mise à jour
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function parking()
     {

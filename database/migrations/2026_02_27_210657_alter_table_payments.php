@@ -16,8 +16,7 @@ return new class extends Migration
             $table->foreignId('billing_method_id')->constrained();
             $table->string('reference',50);
             $table->integer('amount');
-            $table->enum('status', ['pending', 'conformed', 'cancelled', 'completed']);
-            $table->string('failure_reason',255);
+            $table->enum('status', ['pending', 'confirmed', 'cancelled', 'completed', 'failed', 'refunded']);            $table->string('failure_reason',255)->nullable();
             $table->dropColumn('rate');
         });
     }
