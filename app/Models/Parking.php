@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Parking extends Model
 {
-    /** @use HasFactory<\Database\Factories\ParkingFactory> */
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
@@ -23,31 +23,33 @@ class Parking extends Model
         'height',
         'width',
         'length',
-        'charge',
-        'exterior',
-        'box',
-        'owner_id',
+        'has_charge',  // Corrigé
+        'is_exterior', // Corrigé
+        'is_box',      // Corrigé
+        'user_id',     // Corrigé
         'price_per_hour',
         'available',
-        'image_1',
-        'image_2',
-        'image_3',
-    ];
-    protected $casts = [
-        'charge' => 'boolean',
-        'exterior' => 'boolean',
-        'box' => 'boolean',
-        'available' => 'boolean',
-        'latitude' => 'float',
-        'longitude' => 'float',
-        'height' => 'float',
-        'width' => 'float',
-        'length' => 'float',
+        'image_url',   // Corrigé
     ];
 
-    public function owner()
+    protected $casts = [
+        'has_charge'  => 'boolean',
+        'is_exterior' => 'boolean',
+        'is_box'      => 'boolean',
+        'available'   => 'boolean',
+        'latitude'    => 'float',
+        'longitude'   => 'float',
+        'height'      => 'integer', // Changé en integer suite au passage en smallInteger
+        'width'       => 'integer',
+        'length'      => 'integer',
+    ];
+
+    /**
+     * Relation vers l'utilisateur (propriétaire)
+     */
+    public function user() // Renommé pour cohérence avec user_id
     {
-        return $this->belongsTo(User::class, 'owner_id');
+        return $this->belongsTo(User::class);
     }
 
     public function bookings()

@@ -3,24 +3,32 @@
 namespace Database\Factories;
 
 use App\Models\Invoice;
+use App\Models\User;
+use App\Models\BillingMethod;
+use App\Models\Payment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Payment>
- */
 class PaymentFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Payment::class;
+
     public function definition(): array
     {
-        $invoiceId = Invoice::inRandomOrder()->first()?->id ?? Invoice::factory();
+        $invoice = Invoice::inRandomOrder()->first() ?? Invoice::factory()->create();
+        $user = User::inRandomOrder()->first() ?? User::factory()->create();
+
+        $billingMethod = BillingMethod::where('user_id', $user->id)->first()
+            ?? BillingMethod::factory()->create(['user_id' => $user->id]);
+        $status = $this->faker->randomElement(['pending', 'confirmed', 'cancelled', 'completed', 'failed', 'refunded']);
+
         return [
-            'invoice_id' => $invoiceId,
-            'rate' => $this->faker->numberBetween(10, 60),
+            'invoice_id'        => $invoice->id,
+            'user_id'           => $user->id,
+            'billing_method_id' => $billingMethod->id,
+            'reference'         => 'REF-' . strtoupper($this->faker->bothify('##??###')),
+            'amount'            => (int) ($invoice->total_amount * 100),
+            'status'            => $status,
+            'failure_reason'    => ($status === 'failed') ? $this->faker->sentence() : null,
         ];
     }
 }

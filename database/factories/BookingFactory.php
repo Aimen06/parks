@@ -8,37 +8,33 @@ use App\Models\Booking;
 use App\Models\User;
 use App\Models\Parking;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Booking>
- */
 class BookingFactory extends Factory
 {
     protected $model = Booking::class;
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+
     public function definition(): array
     {
-        $entry = Carbon::instance($this->faker->dateTimeBetween('now', '+3 months'));
+        $start = Carbon::instance($this->faker->dateTimeBetween('now', '+3 months'));
         $duration = $this->faker->numberBetween(30, 300); // en minutes
-        //pour cloner l'objet entry et ajouter des minutes et permettre de ne pas modifier l'original
-        $exit = (clone $entry)->addMinutes($duration);
-        $customerId = User::inRandomOrder()->first()?->id ?? User::factory();
+        $end = (clone $start)->addMinutes($duration);
+
+        $user = User::inRandomOrder()->first();
         $parking = Parking::inRandomOrder()->first();
+        $status = $this->faker->randomElement(['pending', 'confirmed', 'canceled', 'completed']);
 
         return [
-            'customer_id' => $customerId,
-            'parking_id' => $parking->id ?? Parking::factory(),
-            'entry_date' => $entry->format('Y-m-d'),
-            'entry_time' => $entry,
-            'exit_date' => $exit->format('Y-m-d'),
-            'exit_time' => $exit,
-            'duration' => $duration,
-            'cost' => $parking
-                ? ($duration / 60) * $parking->price_per_hour
-                : $this->faker->numberBetween(10, 300)
+            'user_id'     => $user?->id ?? User::factory(),
+            'parking_id'  => $parking?->id ?? Parking::factory(),
+            'start_date'  => $start,
+            'end_date'    => $end,
+            'duration'    => $duration,
+            'total_price' => $parking
+                ? (int)(($duration / 60) * $parking->price_per_hour)
+                : $this->faker->numberBetween(500, 5000),
+            'status'      => $status,
+            'cancellation_reason' => $status === 'canceled'
+                ? $this->faker->sentence(3)
+                : '',
         ];
     }
 }

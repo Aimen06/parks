@@ -2,39 +2,46 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
+use App\Models\Parking;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Parking>
- */
 class ParkingFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Parking::class;
+
     public function definition(): array
     {
+        $locations = [
+            'Marseille' => '13000',
+            'Cannes'    => '06400',
+            'Nice'      => '06000',
+            'Paris'     => '75000'
+        ];
+
+        $city = $this->faker->randomElement(array_keys($locations));
+        $zip  = $locations[$city];
+
         return [
-            'name' => $this->faker->company . ' Parking',
-            'number' => $this->faker->optional()->randomNumber(2),
-            'address' => $this->faker->streetAddress,
-            'floor' => $this->faker->optional()->randomElement(['-1', '0', '1', '2']),
-            'zip' => $this->faker->numerify('#####'),
-            'city' => $this->faker->city,
-            'latitude' => $this->faker->optional()->latitude,
-            'longitude' => $this->faker->optional()->longitude,
-            'remark' => $this->faker->optional()->sentence,
-            'height' => $this->faker->randomFloat(2, 1.5, 3.5),
-            'width' => $this->faker->randomFloat(2, 2.0, 3.0),
-            'length' => $this->faker->randomFloat(2, 4.0, 6.0),
-            'charge' => $this->faker->boolean,
-            'exterior' => $this->faker->boolean,
-            'box' => $this->faker->boolean,
-            'owner_id' => $this->faker->numberBetween(1, 15), // à adapter à ton UserSeeder
-            'price_per_hour' => $this->faker->numberBetween(200, 1500), // en centimes
-            'available' => true,
+            'name'           => $this->faker->company . ' Parking',
+            'number'         => $this->faker->optional()->randomNumber(2),
+            'address'        => $this->faker->streetAddress,
+            'floor'          => $this->faker->optional()->randomElement(['-1', '0', '1', '2']),
+            'zip'            => $zip,
+            'city'           => $city,
+            'latitude'       => $this->faker->latitude,
+            'longitude'      => $this->faker->longitude,
+            'remark'         => $this->faker->sentence,
+            'height'         => $this->faker->numberBetween(180, 250),
+            'width'          => $this->faker->numberBetween(220, 300),
+            'length'         => $this->faker->numberBetween(450, 600),
+            'has_charge'     => $this->faker->boolean,
+            'is_exterior'    => $this->faker->boolean,
+            'is_box'         => $this->faker->boolean,
+            'user_id'        => User::inRandomOrder()->first()?->id ?? User::factory(),
+            'price_per_hour' => $this->faker->numberBetween(150, 500),
+            'available'      => true,
+            'image_url'      => $this->faker->imageUrl(640, 480, 'parking'),
         ];
     }
 }

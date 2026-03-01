@@ -13,13 +13,16 @@ class BillingMethod extends Model
 
     protected $fillable = [
         'user_id',
+        'name',
         'type',
         'value',
         'is_default',
     ];
 
     protected $casts = [
+        'user_id'    => 'integer',
         'is_default' => 'boolean',
+        'value'      => 'encrypted',
     ];
 
     public function user()
