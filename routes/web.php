@@ -1,22 +1,27 @@
 <?php
 
-use App\Http\Controllers\AvailabilityController;
+use App\Http\Controllers\BillingMethodController; // Ajouté
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ParkingController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PayoutsController; // Ajouté
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\UnavailabilityController;
 use App\Http\Controllers\UserController;
-use App\Models\BillingMethod;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
 
+// Routes publiques
 Route::get('/', function () {
     if (Auth::check()) {
         return redirect('/dashboard');
@@ -29,7 +34,6 @@ Route::get('/rent-park', function () {
     return Inertia::render('guest/RentPark');
 })->name('rent-park');
 
-
 Route::get('/about', function () {
     return Inertia::render('guest/About');
 })->name('about');
@@ -37,23 +41,18 @@ Route::get('/about', function () {
 Route::get('/contact', [ContactController::class, 'create'])->name('contact.create');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
-// Route publique pour AFFICHER la page de recherche
+// Recherche de parkings
 Route::get('/search', function () {
     return Inertia::render('guest/parkings/Search');
 })->name('parking.searchPage');
 
-// === MODIFICATION ICI ===
-// La soumission de recherche et la pagination utilisent GET
 Route::get('/parkings/search', [ParkingController::class, 'search'])->name('parking.search');
-// === FIN DE LA MODIFICATION ===
 
-
+// Routes protégées (Auth & Verified)
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-});
 
-// Ce groupe gère le CRUD pour les propriétaires connectés
-Route::middleware(['auth', 'verified'])->group(function () {
+    // CRUD Ressources
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('parkings', ParkingController::class);
@@ -61,11 +60,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('reviews', ReviewController::class);
     Route::resource('invoices', InvoiceController::class);
     Route::resource('payments', PaymentController::class);
-    Route::resource('billing-methods', BillingMethod::class);
-    Route::resource('availabilities', AvailabilityController::class);
-    Route::resource('unavailabilities', UnavailabilityController::class);
+    Route::resource('payouts', PayoutsController::class); // Ajouté
+    Route::resource('billing-methods', BillingMethodController::class);
 });
-
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
