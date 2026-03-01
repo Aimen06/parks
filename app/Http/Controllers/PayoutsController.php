@@ -2,64 +2,40 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Payout;
 use App\Models\Payouts;
 use Illuminate\Http\Request;
 
 class PayoutsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $payouts = Payout::where('user_id', Auth::id())->paginate(10);
+        return Inertia::render('Payouts/Index', ['payouts' => $payouts]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
-    }
+        $validated = $request->validate([
+            'invoice_id'    => 'required|exists:invoices,id',
+            'payout_method' => 'required|in:bank_transfer,paypal,stripe',
+            'amount'        => 'required|integer',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Payouts $payouts)
-    {
-        //
-    }
+         $commission = (int)($validated['amount'] * 0.10);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Payouts $payouts)
-    {
-        //
-    }
+        Payout::create([
+            'invoice_id'      => $validated['invoice_id'],
+            'user_id'         => Auth::id(),
+            'payout_method'   => $validated['payout_method'],
+            'amount'          => $validated['amount'],
+            'commission_rate' => 10,
+            'net_amount'      => $validated['amount'] - $commission,
+            'status'          => 'pending',
+            'reference'       => 'PAY-' . strtoupper(str()->random(8)),
+            'scheduled_at'    => now()->addDays(7),
+        ]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Payouts $payouts)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Payouts $payouts)
-    {
-        //
+        return redirect()->back()->with('success', 'Demande de virement créée.');
     }
 }

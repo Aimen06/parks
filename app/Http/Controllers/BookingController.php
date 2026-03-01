@@ -31,39 +31,20 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
-        // Valider les données du formulaire
-        $validatedData = $request->validate([
-            'customer_id' => 'requiered|numeric',
-            'parking_id' => 'requiered|numeric',
-            'entry_date' => 'requiered|datetime',
-            'entry_time' => 'requiered|datetime',
-            'exit_date' => 'requiered|datetime',
-            'exit_time' => 'requiered|datetime',
-            'duration' => 'requiered|numeric',
-            'cost' => 'requiered|numeric',
+        $validated = $request->validate([
+            'parking_id' => 'required|numeric|exists:parkings,id',
+            'start_date' => 'required|date', // Ancien entry_time
+            'end_date'   => 'required|date|after:start_date', // Ancien exit_time
+            'duration'   => 'required|numeric',
+            'total_price'=> 'required|numeric', // Ancien cost
         ]);
 
-        try {
-            // Créer une nouvelle réservation
-            $booking = Booking::create([
-                'customer_id' => $validatedData['customer_id'],
-                'parking_id' => $validatedData['parking_id'],
-                'entry_date' => $validatedData['entry_date'],
-                'entry_time' => $validatedData['entry_time'],
-                'exit_date' => $validatedData['exit_date'],
-                'exit_time' => $validatedData['exit_time'],
-                'duration' => $validatedData['duration'],
-                'cost' => $validatedData['cost'],
-            ]);
+        Booking::create(array_merge($validated, [
+            'user_id' => Auth::id(), // Ancien customer_id
+            'status'  => 'pending'
+        ]));
 
-            // Rediriger vers la liste des utilisateurs avec un message de succès
-            return redirect()->route('bookings.index')->with('success', 'Réservation créé avec succès.');
-
-        } catch (\Exception $e) {
-            // Gestion des erreurs
-            return back()->withInput()->withErrors(['error' => 'Erreur lors de la création de la réservation
-            : ' . $e->getMessage()]);
-        }
+        return redirect()->route('bookings.index')->with('success', 'Réservation effectuée.');
     }
 
     /**

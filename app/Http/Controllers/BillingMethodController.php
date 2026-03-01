@@ -33,20 +33,16 @@ class BillingMethodController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:50',
-            'default' => 'nullable|boolean',
+        $validated = $request->validate([
+            'name'       => 'required|string|max:50',
+            'type'       => 'required|in:cb,rib,paypal',
+            'value'      => 'required|string', // Sera encrypté par le modèle
+            'is_default' => 'nullable|boolean',
         ]);
 
-        try {
-            $billingMethod = BillingMethod::create([
-                'name' => $validatedData['name'],
-                'default' => $validatedData['default'],
-            ]);
-            return redirect()->route('billing-methods.index')->with('success', 'Moyen de paiement créée avec succès.');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Erreur lors de la création du moyen de paiement : ' . $e->getMessage());
-        }
+        Auth::user()->billingMethods()->create($validated);
+
+        return redirect()->route('billing-methods.index')->with('success', 'Moyen de paiement ajouté.');
     }
 
     /**
